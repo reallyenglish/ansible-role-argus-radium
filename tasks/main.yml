@@ -1,0 +1,37 @@
+---
+# tasks file for ansible-role-argus-radium
+
+- include_vars: "{{ ansible_os_family }}.yml"
+
+- include: "install-{{ ansible_os_family }}.yml"
+
+- name: Create log directory
+  file:
+    path: "{{ argus-radium_log_dir }}"
+    mode: 0755
+    owner: "{{ argus-radium_user }}"
+    group: "{{ argus-radium_group }}"
+    state: directory
+  notify: Restart argus-radium
+
+- name: Create db directory
+  file:
+    path: "{{ argus-radium_db_dir }}"
+    mode: 0755
+    owner: "{{ argus-radium_user }}"
+    group: "{{ argus-radium_group }}"
+    state: directory
+  notify: Restart argus-radium
+
+- name: Create argus-radium.conf
+  template:
+    src: argus-radium.conf.j2
+    dest: "{{ argus-radium_conf_file }}"
+    validate: echo %s
+  notify: Restart argus-radium
+
+- name: Start argus-radium
+  service:
+    name: "{{ argus-radium_service }}"
+    enabled: true
+    state: started

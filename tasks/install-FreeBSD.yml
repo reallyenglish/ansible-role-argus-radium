@@ -1,0 +1,6 @@
+---
+
+- name: Install argus-radium
+  pkgng:
+    name: argus-radium
+    state: present

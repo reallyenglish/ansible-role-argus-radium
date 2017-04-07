@@ -1,0 +1,6 @@
+---
+
+- name: Restart argus-radium
+  service:
+    name: argus-radium
+    state: restarted

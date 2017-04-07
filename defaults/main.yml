@@ -1,0 +1,8 @@
+argus-radium_user: argus-radium
+argus-radium_group: argus-radium
+argus-radium_log_dir: /var/log/argus-radium
+argus-radium_db_dir: "{{ __argus-radium_db_dir }}"
+argus-radium_service: argus-radium
+argus-radium_conf_dir: "{{ __argus-radium_conf_dir }}"
+argus-radium_conf_file: "{{ __argus-radium_conf_dir }}/argus-radium.conf"
+argus-radium_flags: ""

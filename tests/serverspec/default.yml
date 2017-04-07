@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    - ansible-role-argus-radium
+  vars:
+    argus-radium_config: ""
