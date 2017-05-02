@@ -20,15 +20,8 @@
     dest: "{{ argus_radium_conf_file }}"
   notify: Restart radium
 
-- command: test -f /usr/local/bin/radium
-  changed_when: false
-
-
 - name: Start radium
   service:
     name: "{{ argus_radium_service }}"
     enabled: true
     state: started
-
-- command: test -f /usr/local/bin/radium
-  changed_when: false
