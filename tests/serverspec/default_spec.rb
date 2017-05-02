@@ -27,6 +27,9 @@ end
 
 describe file(config) do
   it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by default_user }
+  it { should be_grouped_into default_group }
   its(:content) { should match (/^RADIUM_DAEMON="no"$/) }
   its(:content) { should match (/^RADIUM_MONITOR_ID="localhost"$/) }
   its(:content) { should match (/^RADIUM_MAR_STATUS_INTERVAL=60$/) }
@@ -43,6 +46,7 @@ end
 
 describe file(log_dir) do
   it { should exist }
+  it { should be_directory }
   it { should be_mode 755 }
   it { should be_owned_by user }
   it { should be_grouped_into group }
@@ -60,6 +64,9 @@ when "centos"
 when "freebsd"
   describe file("/etc/rc.conf.d/radium") do
     it { should be_file }
+    it { should be_mode 644 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
     its(:content) { should match(/^radium_flags="-f #{ Regexp.escape("/usr/local/etc/radium.conf") }"$/) }
   end
 end
