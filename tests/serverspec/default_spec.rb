@@ -53,13 +53,13 @@ describe file(log_dir) do
 end
 
 case os[:family]
-when "centos"
+when "redhat"
   describe file("/etc/sysconfig/radium") do
     it { should be_file }
     it { should be_mode 644 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
-    its(:content) { should match(/^radium_flags="OPTIONS="-f #{ Regexp.escape("/etc/radium.conf") }$/) }
+    its(:content) { should match(/^OPTIONS="-f #{ Regexp.escape("/etc/radium.conf") }"$/) }
   end
 when "freebsd"
   describe file("/etc/rc.conf.d/radium") do
