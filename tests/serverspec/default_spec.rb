@@ -93,7 +93,7 @@ when "freebsd"
     its(:content) { should match(/^radium_flags="-f #{ Regexp.escape("/usr/local/etc/radium.conf") }"$/) }
   end
 
-  describe file("/usr/local/etc/rc.d/radius") do
+  describe file("/usr/local/etc/rc.d/radium") do
     it { should be_file }
     it { should be_mode 755 }
     it { should be_owned_by default_user }
