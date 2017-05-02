@@ -1,0 +1,16 @@
+---
+
+- name: Install argus-clients
+  yum:
+    name: "{{ argus_radium_package }}"
+    state: present
+
+- name: Install sysconfig file
+  template:
+    src: RedHat.sysconfig.j2
+    dest: /etc/sysconfig/radium
+
+- name: Install systemd unit file
+  copy:
+    src: files/radium.unit
+    dest: "/lib/systemd/system/{{ argus_radium_service }}.service"
