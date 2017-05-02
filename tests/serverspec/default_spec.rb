@@ -9,6 +9,8 @@ user    = "argus"
 group   = "argus"
 ports   = [ 561, 562 ]
 log_dir = "/var/log/argus"
+default_user = "root"
+default_group = "root"
 
 case os[:family]
 when "freebsd"
@@ -16,6 +18,7 @@ when "freebsd"
   config = "/usr/local/etc/radium.conf"
   ra_config = "/usr/local/etc/ra.conf"
   log_dir = "/var/log/argus"
+  default_group = "wheel"
 end
 
 describe package(package) do
@@ -46,6 +49,14 @@ describe file(log_dir) do
 end
 
 case os[:family]
+when "centos"
+  describe file("/etc/sysconfig/radium") do
+    it { should be_file }
+    it { should be_mode 644 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
+    its(:content) { should match(/^radium_flags="OPTIONS="-f #{ Regexp.escape("/etc/radium.conf") }$/) }
+  end
 when "freebsd"
   describe file("/etc/rc.conf.d/radium") do
     it { should be_file }
