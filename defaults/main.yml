@@ -1,8 +1,10 @@
-argus-radium_user: argus-radium
-argus-radium_group: argus-radium
-argus-radium_log_dir: /var/log/argus-radium
-argus-radium_db_dir: "{{ __argus-radium_db_dir }}"
-argus-radium_service: argus-radium
-argus-radium_conf_dir: "{{ __argus-radium_conf_dir }}"
-argus-radium_conf_file: "{{ __argus-radium_conf_dir }}/argus-radium.conf"
-argus-radium_flags: ""
+argus_radium_user: "{{ argus_user }}"
+argus_radium_group: "{{ argus_group }}"
+argus_radium_package: "{{ __argus_raduim_package }}"
+argus_radium_log_dir: "{{ argus_log_dir }}"
+argus_radium_service: radium
+argus_radium_conf_dir: "{{ __argus_radium_conf_dir }}"
+argus_radium_conf_file: "{{ argus_radium_conf_dir }}/radium.conf"
+argus_radium_flags: "-f {{ argus_radium_conf_file }}"
+
+argus_radium_config: {}

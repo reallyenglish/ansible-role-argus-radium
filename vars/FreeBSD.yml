@@ -1,2 +1,3 @@
-__argus-radium_db_dir: /var/db/argus-radium
-__argus-radium_conf_dir: /usr/local/etc/argus-radium
+__argus_raduim_package: net-mgmt/argus3-clients
+__argus_radium_conf_dir: /usr/local/etc
+__argus_radium_flags: "-f {{ __argus_radium_conf_file }}"

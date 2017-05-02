@@ -1,6 +1,24 @@
 ---
 
-- name: Install argus-radium
+- name: Install argus-clients
   pkgng:
-    name: argus-radium
+    name: "{{ argus_radium_package }}"
     state: present
+
+- command: test -f /usr/local/bin/radium
+  changed_when: false
+
+- name: Create rc script for radium
+  # XXX the port does not provide one
+  copy:
+    src: files/radium.sh
+    dest: /usr/local/etc/rc.d/radium
+    mode: 755
+
+- command: test -f /usr/local/bin/radium
+  changed_when: false
+
+- name: Create /etc/rc.conf.d/radium
+  template:
+    src: FreeBSD.rc.d.j2
+    dest: /etc/rc.conf.d/radium

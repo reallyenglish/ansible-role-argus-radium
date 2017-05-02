@@ -1,6 +1,6 @@
 ---
 
-- name: Restart argus-radium
+- name: Restart radium
   service:
-    name: argus-radium
+    name: radium
     state: restarted

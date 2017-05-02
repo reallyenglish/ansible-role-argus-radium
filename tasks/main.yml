@@ -7,31 +7,28 @@
 
 - name: Create log directory
   file:
-    path: "{{ argus-radium_log_dir }}"
+    path: "{{ argus_radium_log_dir }}"
     mode: 0755
-    owner: "{{ argus-radium_user }}"
-    group: "{{ argus-radium_group }}"
+    owner: "{{ argus_user}}"
+    group: "{{ argus_group }}"
     state: directory
-  notify: Restart argus-radium
+  notify: Restart radium
 
-- name: Create db directory
-  file:
-    path: "{{ argus-radium_db_dir }}"
-    mode: 0755
-    owner: "{{ argus-radium_user }}"
-    group: "{{ argus-radium_group }}"
-    state: directory
-  notify: Restart argus-radium
-
-- name: Create argus-radium.conf
+- name: Create radium.conf
   template:
-    src: argus-radium.conf.j2
-    dest: "{{ argus-radium_conf_file }}"
-    validate: echo %s
-  notify: Restart argus-radium
+    src: radium.conf.j2
+    dest: "{{ argus_radium_conf_file }}"
+  notify: Restart radium
 
-- name: Start argus-radium
+- command: test -f /usr/local/bin/radium
+  changed_when: false
+
+
+- name: Start radium
   service:
-    name: "{{ argus-radium_service }}"
+    name: "{{ argus_radium_service }}"
     enabled: true
     state: started
+
+- command: test -f /usr/local/bin/radium
+  changed_when: false
