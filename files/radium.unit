@@ -1,0 +1,11 @@
+[Unit]
+Description=radium
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/sbin/radium "$OPTIONS"
+EnvironmentFile=/etc/sysconfig/radium
+
+[Install]
+WantedBy=multi-user.target

@@ -9,6 +9,8 @@ user    = "argus"
 group   = "argus"
 ports   = [ 561, 562 ]
 log_dir = "/var/log/argus"
+default_user = "root"
+default_group = "root"
 
 case os[:family]
 when "freebsd"
@@ -16,6 +18,7 @@ when "freebsd"
   config = "/usr/local/etc/radium.conf"
   ra_config = "/usr/local/etc/ra.conf"
   log_dir = "/var/log/argus"
+  default_group = "wheel"
 end
 
 describe package(package) do
@@ -24,6 +27,9 @@ end
 
 describe file(config) do
   it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by default_user }
+  it { should be_grouped_into default_group }
   its(:content) { should match (/^RADIUM_DAEMON="no"$/) }
   its(:content) { should match (/^RADIUM_MONITOR_ID="localhost"$/) }
   its(:content) { should match (/^RADIUM_MAR_STATUS_INTERVAL=60$/) }
@@ -40,15 +46,27 @@ end
 
 describe file(log_dir) do
   it { should exist }
+  it { should be_directory }
   it { should be_mode 755 }
   it { should be_owned_by user }
   it { should be_grouped_into group }
 end
 
 case os[:family]
+when "redhat"
+  describe file("/etc/sysconfig/radium") do
+    it { should be_file }
+    it { should be_mode 644 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
+    its(:content) { should match(/^OPTIONS="-f #{ Regexp.escape("/etc/radium.conf") }"$/) }
+  end
 when "freebsd"
   describe file("/etc/rc.conf.d/radium") do
     it { should be_file }
+    it { should be_mode 644 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
     its(:content) { should match(/^radium_flags="-f #{ Regexp.escape("/usr/local/etc/radium.conf") }"$/) }
   end
 end
