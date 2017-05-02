@@ -9,8 +9,8 @@
   file:
     path: "{{ argus_radium_log_dir }}"
     mode: 0755
-    owner: "{{ argus_user}}"
-    group: "{{ argus_group }}"
+    owner: "{{ argus_radium_user}}"
+    group: "{{ argus_radium_group }}"
     state: directory
   notify: Restart radium
 
@@ -25,3 +25,4 @@
     name: "{{ argus_radium_service }}"
     enabled: true
     state: started
+    args: "{% if ansible_os_family == 'OpenBSD' %}{{ argus_radium_flags }}{% endif %}"

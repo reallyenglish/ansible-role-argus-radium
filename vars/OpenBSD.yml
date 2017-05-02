@@ -1,6 +1,6 @@
-__argus_radium_user: argus
-__argus_radium_group: argus
+__argus_radium_user: _argus
+__argus_radium_group: _argus
 __argus_raduim_package: argus-clients
 __argus_radium_conf_dir: /etc
 __argus_radium_conf_file: "{{ __argus_radium_conf_dir }}/radium.conf"
-__argus_radium_flags: "-f {{ __argus_radium_conf_file }}"
+__argus_radium_flags: ""

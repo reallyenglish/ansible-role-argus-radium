@@ -11,8 +11,14 @@ ports   = [ 561, 562 ]
 log_dir = "/var/log/argus"
 default_user = "root"
 default_group = "root"
+daemonized = "no"
 
 case os[:family]
+when "openbsd"
+  user = "_argus"
+  group = "_argus"
+  default_group = "wheel"
+  daemonized = "yes"
 when "freebsd"
   package = "argus-clients-sasl"
   config = "/usr/local/etc/radium.conf"
@@ -25,14 +31,23 @@ describe package(package) do
   it { should be_installed }
 end 
 
+describe group(group) do
+  it { should exist }
+end
+
+describe user(user) do
+  it { should exist }
+  it { should belong_to_group(group) }
+end
+
 describe file(config) do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by default_user }
   it { should be_grouped_into default_group }
-  its(:content) { should match (/^RADIUM_DAEMON="no"$/) }
+  its(:content) { should match (/^RADIUM_DAEMON="#{ Regexp.escape(daemonized) }"$/) }
   its(:content) { should match (/^RADIUM_MONITOR_ID="localhost"$/) }
-  its(:content) { should match (/^RADIUM_MAR_STATUS_INTERVAL=60$/) }
+  its(:content) { should match (/^RADIUM_MAR_STATUS_INTERVAL=5$/) }
   its(:content) { should match (/^RADIUM_ARGUS_SERVER="argus:\/\/localhost:561"$/) }
   its(:content) { should match (/^RADIUM_FILTER="ip"/) }
   its(:content) { should match (/^RADIUM_USER_AUTH="foo@reallyenglish\.com\/foo@reallyenglish\.com"$/) }
@@ -53,6 +68,14 @@ describe file(log_dir) do
 end
 
 case os[:family]
+when "openbsd"
+  describe file("/etc/rc.d/radium") do
+    it { should be_file }
+    it { should be_mode 755 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
+    its(:content) { should match(/^daemon="\/usr\/local\/sbin\/radium"$/) }
+  end
 when "redhat"
   describe file("/etc/sysconfig/radium") do
     it { should be_file }
@@ -68,6 +91,13 @@ when "freebsd"
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
     its(:content) { should match(/^radium_flags="-f #{ Regexp.escape("/usr/local/etc/radium.conf") }"$/) }
+  end
+
+  describe file("/usr/local/etc/rc.d/radius") do
+    it { should be_file }
+    it { should be_mode 755 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
   end
 end
 

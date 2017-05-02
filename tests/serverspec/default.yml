@@ -2,13 +2,13 @@
   roles:
     - reallyenglish.argus
     - reallyenglish.argus-clients
-    - reallyenglish.cyrus-sasl
+    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
     - ansible-role-argus-radium
   vars:
     argus_radium_config:
-      RADIUM_DAEMON: "no"
+      RADIUM_DAEMON: "{% if ansible_os_family == 'OpenBSD' %}yes{% else %}no{% endif %}"
       RADIUM_MONITOR_ID: "localhost"
-      RADIUM_MAR_STATUS_INTERVAL: 60
+      RADIUM_MAR_STATUS_INTERVAL: 5
       RADIUM_ARGUS_SERVER: argus://localhost:561
       RADIUM_FILTER: "ip"
       RADIUM_USER_AUTH: "foo@reallyenglish.com/foo@reallyenglish.com"
@@ -16,8 +16,8 @@
       RADIUM_ACCESS_PORT: 562
       RADIUM_BIND_IP: 127.0.0.1
       RADIUM_OUTPUT_FILE: /var/log/argus/radium.out
-      RADIUM_SETUSER_ID: argus 
-      RADIUM_SETGROUP_ID: argus
+      RADIUM_SETUSER_ID: "{{ argus_radium_user }}"
+      RADIUM_SETGROUP_ID: "{{ argus_radium_group }}"
 
     redhat_repo:
       epel:
@@ -36,7 +36,7 @@
         appname: "argus"
         password: password
         state: present
-    cyrus_sasl_sasldb_group: argus
+    cyrus_sasl_sasldb_group: "{{ argus_user }}"
     cyrus_sasl_sasldb_file_permission: "0640"
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"
