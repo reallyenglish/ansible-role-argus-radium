@@ -1,5 +1,10 @@
 __argus_radium_user: argus
+__argus_radium_user_home: /var/log/argus
+__argus_radium_user_shell: /sbin/nologin
+__argus_radium_user_uid: 561
+__argus_radium_user_comment: Argus daemon
 __argus_radium_group: argus
+__argus_radium_group_gid: 561
 __argus_raduim_package: argus-clients
 __argus_radium_conf_dir: /etc
 __argus_radium_conf_file: "{{ __argus_radium_conf_dir }}/radium.conf"

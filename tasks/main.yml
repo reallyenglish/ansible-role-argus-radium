@@ -5,6 +5,22 @@
 
 - include: "install-{{ ansible_os_family }}.yml"
 
+- name: Create argus_radium_group
+  group:
+    name: "{{ argus_radium_group }}"
+    gid: "{{ argus_radium_group_gid }}"
+
+- name: Create argus_radium_user
+  user:
+    name: "{{ argus_radium_user }}"
+    group: "{{ argus_radium_group }}"
+    home: "{{ argus_radium_user_home }}"
+    shell: "{{ argus_radium_user_shell }}"
+    uid: "{{ argus_radium_user_uid }}"
+    comment: "{{ argus_radium_user_comment }}"
+    createhome: no
+    state: present
+
 - name: Create log directory
   file:
     path: "{{ argus_radium_log_dir }}"

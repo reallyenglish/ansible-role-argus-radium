@@ -5,6 +5,9 @@
     - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
     - ansible-role-argus-radium
   vars:
+    argus_radium_user_uid: "{% if ansible_os_family == 'FreeBSD' %}1002{% elif ansible_os_family == 'OpenBSD' %}603{% elif ansible_os_family == 'RedHat' %}1001{% endif %}"
+    argus_radium_group_gid: "{% if ansible_os_family == 'FreeBSD' %}1002{% elif ansible_os_family == 'OpenBSD' %}603{% elif ansible_os_family == 'RedHat' %}1001{% endif %}"
+    argus_radium_user_comment: "{% if ansible_os_family == 'FreeBSD' %}User &{% elif ansible_os_family == 'OpenBSD' %}Argus Daemon{% elif ansible_os_family == 'RedHat' %}{% endif %}"
     argus_radium_config:
       RADIUM_DAEMON: "{% if ansible_os_family == 'OpenBSD' %}yes{% else %}no{% endif %}"
       RADIUM_MONITOR_ID: "localhost"

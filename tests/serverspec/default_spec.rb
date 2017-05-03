@@ -6,7 +6,11 @@ service = "radium"
 config  = "/etc/radium.conf"
 ra_config = "/etc/ra.conf"
 user    = "argus"
-group   = "argus"
+user_uid     = 561
+user_shell   = ""
+user_home    = ""
+group        = "argus"
+group_gid    = 561
 ports   = [ 561, 562 ]
 log_dir = "/var/log/argus"
 default_user = "root"
@@ -14,17 +18,31 @@ default_group = "root"
 daemonized = "no"
 
 case os[:family]
+when "redhat"
+  user_uid = 603
+  user_home = "/var/log/argus"
+  user_shell = "/sbin/nologin"
+  user_uid = 1001
+  group_gid = 1001
 when "openbsd"
   user = "_argus"
   group = "_argus"
   default_group = "wheel"
   daemonized = "yes"
+  user_uid = 603
+  user_home = "/nonexistent"
+  user_shell = "/sbin/nologin"
+  group_gid = 603
 when "freebsd"
   package = "argus-clients-sasl"
   config = "/usr/local/etc/radium.conf"
   ra_config = "/usr/local/etc/ra.conf"
   log_dir = "/var/log/argus"
   default_group = "wheel"
+  user_uid = 1002
+  user_home = "/var/log/argus"
+  user_shell = "/usr/sbin/nologin"
+  group_gid = 1002
 end
 
 describe package(package) do
@@ -33,11 +51,16 @@ end
 
 describe group(group) do
   it { should exist }
+  it { should have_gid(group_gid) }
 end
 
 describe user(user) do
   it { should exist }
   it { should belong_to_group(group) }
+  it { should belong_to_primary_group(group) }
+  it { should have_uid(user_uid) }
+  it { should have_home_directory(user_home) }
+  it { should have_login_shell(user_shell) }
 end
 
 describe file(config) do
