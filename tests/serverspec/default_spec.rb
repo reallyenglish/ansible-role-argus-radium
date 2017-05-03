@@ -110,7 +110,7 @@ ports.each do |p|
   describe port(p) do
     it { should be_listening }
   end
-  describe command("ra -S 127.0.0.1:#{ p } -N 1") do
+  describe command("ra -S 127.0.0.1:#{ p } -N 1 -M man") do
     its(:stdout) { should match(/^\s+StartTime\s+Flgs\s+Proto\s+SrcAddr\s+Sport\s+Dir\s+DstAddr\s+Dport\s+TotPkts\s+TotBytes\s+State/) }
     its(:stderr) { should eq "" }
     its(:exit_status) { should eq 0 }
