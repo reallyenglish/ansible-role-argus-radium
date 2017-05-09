@@ -18,12 +18,14 @@ None
 | `argus_radium_user` | user of `radium` | `{{ __argus_radium_user }}` |
 | `argus_radium_user_home` | home of the `argus_radium_user` | `{{ __argus_radium_user_home }}` |
 | `argus_radium_user_shell` | shell of `argus_radium_user` | `{{ __argus_radium_user_shell }}` |
-| `argus_radium_user_uid` | UID of `argus_radium_user` | `{{ __argus_radium_user_uid | default() }}` |
-| `argus_radium_user_comment` | GECOS of `argus_radium_user` | `{{ __argus_radium_user_comment }}` |
+| `argus_radium_user_comment` | GECOS of `argus_radium_user` | `argus radium daemon` |
 | `argus_radium_group` | group of `radium` | `{{ __argus_radium_group }}` |
 | `argus_radium_group_gid` | GID of `argus_radium_group` | `{{ __argus_radium_group_gid | default() }}` |
 | `argus_radium_package` | package name that includes `radium` | `{{ __argus_raduim_package }}` |
 | `argus_radium_log_dir` | log directory | `/var/log/argus` |
+| `argus_radium_log_dir_owner` | owner of log directory. useful when `argus` daemon writes data to the `argus_radium_log_dir` and `radium` daemon reads from it | `{{ argus_radium_user }}` |
+| `argus_radium_log_dir_group` | group of log directory. useful when `argus` daemon writes data to the `argus_radium_log_dir` and `radium` daemon reads from it | `{{ argus_radium_group }}` |
+| `argus_radium_log_dir_mode` | permission of log directory | `0755` |
 | `argus_radium_service` | service name of `radium` | `radium` |
 | `argus_radium_conf_dir` | path to directory where ``argus_radium_conf_file` resides | `{{ __argus_radium_conf_dir }}` |
 | `argus_radium_conf_file` | path to `radium.conf(5)` | `{{ __argus_radium_conf_dir }}/radium.conf` |
@@ -50,18 +52,14 @@ argus_radium_config:
   RADIUM_SETUSER_ID: "{{ argus_radium_user }}"
   RADIUM_SETGROUP_ID: "{{ argus_radium_group }}"
 ```
-
 ## FreeBSD
 
 | Variable | Default |
 |----------|---------|
-| `__argus_radium_user` | `argus` |
+| `__argus_radium_user` | `raidum` |
 | `__argus_radium_user_home` | `/var/log/argus` |
 | `__argus_radium_user_shell` | `/usr/sbin/nologin` |
-| `__argus_radium_user_uid` | `561` |
-| `__argus_radium_user_comment` | `Argus Daemon` |
 | `__argus_radium_group` | `argus` |
-| `__argus_radium_group_gid` | `561` |
 | `__argus_raduim_package` | `net-mgmt/argus3-clients` |
 | `__argus_radium_conf_dir` | `/usr/local/etc` |
 | `__argus_radium_conf_file` | `{{ __argus_radium_conf_dir }}/radium.conf` |
@@ -71,13 +69,10 @@ argus_radium_config:
 
 | Variable | Default |
 |----------|---------|
-| `__argus_radium_user` | `_argus` |
+| `__argus_radium_user` | `_radium` |
 | `__argus_radium_user_home` | `/nonexistent` |
 | `__argus_radium_user_shell` | `/sbin/nologin` |
-| `__argus_radium_user_uid` | `603` |
-| `__argus_radium_user_comment` | `Argus Daemon` |
 | `__argus_radium_group` | `_argus` |
-| `__argus_radium_group_gid` | `603` |
 | `__argus_raduim_package` | `argus-clients` |
 | `__argus_radium_conf_dir` | `/etc` |
 | `__argus_radium_conf_file` | `{{ __argus_radium_conf_dir }}/radium.conf` |
@@ -87,13 +82,10 @@ argus_radium_config:
 
 | Variable | Default |
 |----------|---------|
-| `__argus_radium_user` | `argus` |
+| `__argus_radium_user` | `radium` |
 | `__argus_radium_user_home` | `/var/log/argus` |
 | `__argus_radium_user_shell` | `/sbin/nologin` |
-| `__argus_radium_user_uid` | `561` |
-| `__argus_radium_user_comment` | `Argus daemon` |
 | `__argus_radium_group` | `argus` |
-| `__argus_radium_group_gid` | `561` |
 | `__argus_raduim_package` | `argus-clients` |
 | `__argus_radium_conf_dir` | `/etc` |
 | `__argus_radium_conf_file` | `{{ __argus_radium_conf_dir }}/radium.conf` |
@@ -113,9 +105,8 @@ argus_radium_config:
     - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
     - ansible-role-argus-radium
   vars:
-    argus_radium_user_uid: "{% if ansible_os_family == 'FreeBSD' %}1002{% elif ansible_os_family == 'OpenBSD' %}603{% elif ansible_os_family == 'RedHat' %}1001{% endif %}"
-    argus_radium_group_gid: "{% if ansible_os_family == 'FreeBSD' %}1002{% elif ansible_os_family == 'OpenBSD' %}603{% elif ansible_os_family == 'RedHat' %}1001{% endif %}"
-    argus_radium_user_comment: "{% if ansible_os_family == 'FreeBSD' %}User &{% elif ansible_os_family == 'OpenBSD' %}Argus Daemon{% elif ansible_os_family == 'RedHat' %}{% endif %}"
+    argus_radium_log_dir_owner: "{{ argus_user }}"
+    argus_radium_log_dir_mode: "0775"
     argus_radium_config:
       RADIUM_DAEMON: "{% if ansible_os_family == 'OpenBSD' %}yes{% else %}no{% endif %}"
       RADIUM_MONITOR_ID: "localhost"
@@ -149,6 +140,7 @@ argus_radium_config:
         state: present
     cyrus_sasl_sasldb_group: "{{ argus_user }}"
     cyrus_sasl_sasldb_file_permission: "0640"
+    argus_log_dir_mode: "0775"
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"
       ARGUS_FLOW_TYPE: Bidirectional
