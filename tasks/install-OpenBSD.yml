@@ -1,0 +1,12 @@
+---
+
+- name: Install argus-clients
+  openbsd_pkg:
+    name: "{{ argus_radium_package }}"
+    state: present
+
+- name: Create rcctl script
+  copy:
+    src: files/radium.rcctl
+    dest: /etc/rc.d/radium
+    mode: 0755

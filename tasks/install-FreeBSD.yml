@@ -10,7 +10,7 @@
   copy:
     src: files/radium.sh
     dest: /usr/local/etc/rc.d/radium
-    mode: 755
+    mode: 0755
 
 - name: Create /etc/rc.conf.d/radium
   template:

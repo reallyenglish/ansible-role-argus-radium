@@ -5,12 +5,26 @@
 
 - include: "install-{{ ansible_os_family }}.yml"
 
+- name: Create argus_radium_group
+  group:
+    name: "{{ argus_radium_group }}"
+
+- name: Create argus_radium_user
+  user:
+    name: "{{ argus_radium_user }}"
+    group: "{{ argus_radium_log_dir_group }}"
+    home: "{{ argus_radium_user_home }}"
+    shell: "{{ argus_radium_user_shell }}"
+    comment: "{{ argus_radium_user_comment }}"
+    createhome: no
+    state: present
+
 - name: Create log directory
   file:
     path: "{{ argus_radium_log_dir }}"
-    mode: 0755
-    owner: "{{ argus_user}}"
-    group: "{{ argus_group }}"
+    mode: "{{ argus_radium_log_dir_mode }}"
+    owner: "{{ argus_radium_log_dir_owner }}"
+    group: "{{ argus_radium_group }}"
     state: directory
   notify: Restart radium
 
@@ -25,3 +39,4 @@
     name: "{{ argus_radium_service }}"
     enabled: true
     state: started
+    args: "{% if ansible_os_family == 'OpenBSD' %}{{ argus_radium_flags }}{% endif %}"
