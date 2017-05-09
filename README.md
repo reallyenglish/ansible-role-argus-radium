@@ -20,7 +20,6 @@ None
 | `argus_radium_user_shell` | shell of `argus_radium_user` | `{{ __argus_radium_user_shell }}` |
 | `argus_radium_user_comment` | GECOS of `argus_radium_user` | `argus radium daemon` |
 | `argus_radium_group` | group of `radium` | `{{ __argus_radium_group }}` |
-| `argus_radium_group_gid` | GID of `argus_radium_group` | `{{ __argus_radium_group_gid | default() }}` |
 | `argus_radium_package` | package name that includes `radium` | `{{ __argus_raduim_package }}` |
 | `argus_radium_log_dir` | log directory | `/var/log/argus` |
 | `argus_radium_log_dir_owner` | owner of log directory. useful when `argus` daemon writes data to the `argus_radium_log_dir` and `radium` daemon reads from it | `{{ argus_radium_user }}` |
