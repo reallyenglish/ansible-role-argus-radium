@@ -4,5 +4,5 @@ __argus_radium_user_shell: /usr/sbin/nologin
 __argus_radium_group: argus
 __argus_raduim_package: net-mgmt/argus3-clients
 __argus_radium_conf_dir: /usr/local/etc
-__argus_radium_conf_file: "{{ __argus_radium_conf_dir }}/radium.conf"
-__argus_radium_flags: "-f {{ __argus_radium_conf_file }}"
+__argus_radium_conf_file: "{{ argus_radium_conf_dir }}/radium.conf"
+__argus_radium_flags: "-f {{ argus_radium_conf_file }}"
