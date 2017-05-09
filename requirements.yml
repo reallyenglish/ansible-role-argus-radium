@@ -1,4 +1,3 @@
 - name: reallyenglish.argus
-  src: https://github.com/reallyenglish/ansible-role-argus/archive/log_dir_permission.tar.gz
 - name: reallyenglish.argus-clients
 - name: reallyenglish.cyrus-sasl
