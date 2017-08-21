@@ -9,6 +9,7 @@
   template:
     src: RedHat.sysconfig.j2
     dest: /etc/sysconfig/radium
+    validate: sh -n %s
 
 - name: Install systemd unit file
   copy:
