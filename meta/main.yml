@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Tomoyuki Sakurai
-  description: Configures something
+  description: Configures radium
   company: Reallyenglish
   license: BSD
   min_ansible_version: 2.0
@@ -20,6 +20,6 @@ galaxy_info:
     - 7
 
   galaxy_tags:
+    - argus
     - networking
 dependencies:
-  - { role: reallyenglish.redhat-repo, when: ansible_os_family == 'RedHat' }
