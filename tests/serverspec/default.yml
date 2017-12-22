@@ -1,5 +1,7 @@
 - hosts: localhost
   roles:
+    - name: reallyenglish.redhat-repo
+      when: ansible_os_family == 'RedHat'
     - reallyenglish.argus
     - reallyenglish.argus-clients
     - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
@@ -21,6 +23,8 @@
       RADIUM_SETUSER_ID: "{{ argus_radium_user }}"
       RADIUM_SETGROUP_ID: "{{ argus_radium_group }}"
 
+    redhat_repo_extra_packages:
+      - epel-release
     redhat_repo:
       epel:
         mirrorlist: "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-{{ ansible_distribution_major_version }}&arch={{ ansible_architecture }}"
