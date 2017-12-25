@@ -1,10 +1,11 @@
 - hosts: localhost
   roles:
-    - name: reallyenglish.redhat-repo
-      when: ansible_os_family == 'RedHat'
-    - reallyenglish.argus
-    - reallyenglish.argus-clients
-    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
+    - role: reallyenglish.redhat-repo
+      when: ansible_os_family == "RedHat"
+    - role: reallyenglish.argus
+    - role: reallyenglish.argus-clients
+    - role: reallyenglish.cyrus-sasl
+      when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat'
     - ansible-role-argus-radium
   vars:
     argus_radium_log_dir_owner: "{{ argus_user }}"

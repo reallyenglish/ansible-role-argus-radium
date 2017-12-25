@@ -4,7 +4,6 @@ require "serverspec"
 package = "argus-clients"
 service = "radium"
 config  = "/etc/radium.conf"
-# ra_config = "/etc/ra.conf"
 user = "radium"
 argus_user = "argus"
 user_shell   = ""
@@ -31,7 +30,6 @@ when "openbsd"
 when "freebsd"
   package = "argus-clients-sasl"
   config = "/usr/local/etc/radium.conf"
-  #  ra_config = "/usr/local/etc/ra.conf"
   log_dir = "/var/log/argus"
   default_group = "wheel"
   user_home = "/var/log/argus"
@@ -62,9 +60,9 @@ describe file(config) do
   its(:content) { should match(/^RADIUM_DAEMON="#{ Regexp.escape(daemonized) }"$/) }
   its(:content) { should match(/^RADIUM_MONITOR_ID="localhost"$/) }
   its(:content) { should match(/^RADIUM_MAR_STATUS_INTERVAL=5$/) }
-  its(:content) { should match(%r{^RADIUM_ARGUS_SERVER="argus://localhost:561"$}) }
+  its(:content) { should match(/^RADIUM_ARGUS_SERVER="#{Regexp.escape("argus://localhost:561")}"$/) }
   its(:content) { should match(/^RADIUM_FILTER="ip"/) }
-  its(:content) { should match(%r{^RADIUM_USER_AUTH="foo@reallyenglish\.com/foo@reallyenglish\.com"$}) }
+  its(:content) { should match(/^RADIUM_USER_AUTH="#{Regexp.escape("foo@reallyenglish.com/foo@reallyenglish.com")}"$/) }
   its(:content) { should match(/^RADIUM_AUTH_PASS="password"$/) }
   its(:content) { should match(/^RADIUM_ACCESS_PORT=562$/) }
   its(:content) { should match(/^RADIUM_BIND_IP="127\.0\.0\.1"/) }
@@ -88,7 +86,7 @@ when "openbsd"
     it { should be_mode 755 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
-    its(:content) { should match(%r{^daemon="/usr/local/sbin/radium"$}) }
+    its(:content) { should match(/^daemon="#{Regexp.escape("/usr/local/sbin/radium")}"$/) }
   end
 when "redhat"
   describe file("/etc/sysconfig/radium") do
