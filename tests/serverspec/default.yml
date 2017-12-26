@@ -24,6 +24,8 @@
       RADIUM_SETUSER_ID: "{{ argus_radium_user }}"
       RADIUM_SETGROUP_ID: "{{ argus_radium_group }}"
 
+    redhat_repo_extra_packages:
+      - epel-release
     redhat_repo:
       epel:
         mirrorlist: "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-{{ ansible_distribution_major_version }}&arch={{ ansible_architecture }}"
